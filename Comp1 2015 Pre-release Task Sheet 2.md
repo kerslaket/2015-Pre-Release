@@ -4,5 +4,9 @@
     Make_selection(menuChoice) - Loads the correct option that the user entered
     play_game() - Starts a new game
 
+##Question 12
+1. GetMove(StartSquare, FinishSquare)
+2. 
+
 
 > Written with [StackEdit](https://stackedit.io/).

@@ -21,18 +21,20 @@ def get_menu_selection():
   return menuChoice
 
 def make_selection(menuChoice):
-  if menuChoice == 1:
-    play_game()
-  if menuChoice == 2:
+  if menuChoice == "1":
+    SampleGame = "n"
+    play_game(SampleGame)
+  if menuChoice == "2":
     print(" ")
-  if menuChoice == 3:
+  if menuChoice == "3":
+    SampleGame = "y"
+    play_game(SampleGame)
+  if menuChoice == "4":
     print(" ")
-  if menuChoice == 4:
+  if menuChoice == "5":
     print(" ")
-  if menuChoice == 5:
-    print(" ")
-  if menuChoice == 6:
-    print(" ")
+  if menuChoice == "6":
+    print("Goodbye")
 
 def CreateBoard():
   Board = []
@@ -292,12 +294,22 @@ def GetPieceName(Board, Rank, File):
     piece = "Etlu"
   return colour, piece
 
-  
+def option_menu():
+  print("Options")
+  print(" ")
+  print("1. Save Game")
+  print("2. Quit To Menu")
+  print("3. Return To Game")
+
+def option_choice():
+  choice = ("Please select an option: ")
+  if choice = "1":
+    saveGame()
+  if choice = "2":
+  if choice = "3":
     
-if __name__ == "__main__":
-  display_menu()
-  menuChoice = get_menu_selection()
-  make_selection(menuChoice)
+
+def play_game(SampleGame):
   Board = CreateBoard() #0th index not used
   StartSquare = 0 
   FinishSquare = 0
@@ -305,7 +317,6 @@ if __name__ == "__main__":
   while PlayAgain == "Y":
     WhoseTurn = "W"
     GameOver = False
-    SampleGame = GetTypeOfGame()
     if ord(SampleGame) >= 97 and ord(SampleGame) <= 122:
       SampleGame = chr(ord(SampleGame) - 32)
     InitialiseBoard(Board, SampleGame)
@@ -338,5 +349,12 @@ if __name__ == "__main__":
     PlayAgain = input("Do you want to play again (enter Y for Yes)? ")
     if ord(PlayAgain) >= 97 and ord(PlayAgain) <= 122:
       PlayAgain = chr(ord(PlayAgain) - 32)
+
+if __name__ == "__main__":
+  display_menu()
+  menuChoice = get_menu_selection()
+  make_selection(menuChoice)
+  
+
 
 
