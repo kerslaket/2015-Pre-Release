@@ -226,23 +226,31 @@ def InitialiseBoard(Board, SampleGame):
                     
 def GetMove(StartSquare, FinishSquare):
   finished = False
-  finished2 = False
   while not finished:
     finished = True
+    finished2 = False
     try:
       StartSquare = int(input("Enter coordinates of square containing piece to move (file first): "))
-      if len(str(StartSquare)) != 2:
+      if StartSquare == -1:
+        option_menu()
+        option_choice()
+        finished = False
+        finished2 = True
+      elif len(str(StartSquare)) != 2:
         print("Please provide both FILE and RANK for this move")
         finished = False
       else:
         while not finished2:
           finished2 = True
           FinishSquare = int(input("Enter coordinates of square to move piece to (file first): "))
+          if FinishSquare == -1:
+            option_menu()
+            option_choice()
+            finished2 = False
           if len(str(FinishSquare)) != 2:
             print("Please provide both FILE and RANK for this move")
             finished2 = False
             finished = False
-        finished = True
     except ValueError:
       print("Please provide an appropriate answer")
       finished = False
@@ -302,11 +310,13 @@ def option_menu():
   print("3. Return To Game")
 
 def option_choice():
-  choice = ("Please select an option: ")
-  if choice = "1":
-    saveGame()
-  if choice = "2":
-  if choice = "3":
+  choice = input("\nPlease select an option: ")
+  if choice == "1":
+    print("1")
+  if choice == "2":
+    print("2")
+  if choice == "3":
+    print("\nReturning To Game\n")
     
 
 def play_game(SampleGame):
