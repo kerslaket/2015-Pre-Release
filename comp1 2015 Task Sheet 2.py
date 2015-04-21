@@ -83,8 +83,6 @@ def DisplayBoard(Board):
 def CheckRedumMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, ColourOfPiece):
   CheckRedumMoveIsLegal = False
   if ColourOfPiece == "W":
-    if StartRank = 2:
-      
     if FinishRank == StartRank - 1:
       if FinishFile == StartFile and Board[FinishRank][FinishFile] == "  ":
         CheckRedumMoveIsLegal = True
@@ -135,6 +133,9 @@ def CheckNabuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
   CheckNabuMoveIsLegal = False
   if abs(FinishFile - StartFile) == abs(FinishRank - StartRank):
     CheckNabuMoveIsLegal = True
+  for count in range(0, abs(FinishFile - StartFile)):
+    if Board[abs(FinishRank - count)][abs(FinishFile - count)] != "  ":
+      CheckNabuMoveIsLegal = False
   return CheckNabuMoveIsLegal
 
 def CheckMarzazPaniMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
