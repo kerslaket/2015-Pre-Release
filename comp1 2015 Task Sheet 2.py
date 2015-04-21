@@ -3,7 +3,6 @@
 # written by the AQA COMP1 Programmer Team
 # developed in the Python 3.4 programming environment
 
-
 BOARDDIMENSION = 8
 
 def display_menu():
@@ -84,6 +83,8 @@ def DisplayBoard(Board):
 def CheckRedumMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, ColourOfPiece):
   CheckRedumMoveIsLegal = False
   if ColourOfPiece == "W":
+    if StartRank = 2:
+      
     if FinishRank == StartRank - 1:
       if FinishFile == StartFile and Board[FinishRank][FinishFile] == "  ":
         CheckRedumMoveIsLegal = True
@@ -231,9 +232,9 @@ def InitialiseSampleBoard(Board):
   Board[3][8] = "BE"
   Board[6][8] = "BR"
                     
-def GetMove(StartSquare, FinishSquare):
-  finished = False
+def GetMove(StartSquare, FinishSquare, WhoseTurn):
   quitNow = False
+  finished = False
   while not finished:
     finished = True
     finished2 = False
@@ -242,8 +243,16 @@ def GetMove(StartSquare, FinishSquare):
       if StartSquare == -1:
         option_menu()
         option = option_choice()
-        if option == "3":
+        if option == "2":
           quitNow = True
+          return StartSquare, FinishSquare, quitNow
+        if option == "4":
+          quitNow = True
+          if WhoseTurn == "W":
+            print("White Surrendered. Black Wins!\n")
+          else:
+            print("Black Surrendered. White Wins!\n")
+          return StartSquare, FinishSquare, quitNow
         finished = False
         finished2 = True
       elif len(str(StartSquare)) != 2:
@@ -256,8 +265,16 @@ def GetMove(StartSquare, FinishSquare):
           if FinishSquare == -1:
             option_menu()
             option = option_choice()
-            if option == "3":
+            if option == "2":
               quitNow = True
+              return StartSquare, FinishSquare, quitNow
+            if option == "4":
+              quitNow = True
+              if WhoseTurn == "W":
+                print("White Surrendered. Black Wins!\n")
+              else:
+                print("Black Surrendered. White Wins!\n")
+              return StartSquare, FinishSquare, quitNow
             finished2 = False
           if len(str(FinishSquare)) != 2:
             print("Please provide both FILE and RANK for this move")
@@ -320,6 +337,7 @@ def option_menu():
   print("1. Save Game")
   print("2. Quit To Menu")
   print("3. Return To Game")
+  print("4. Surrender")
 
 def option_choice():
   choice = input("\nPlease select an option: ")
@@ -331,57 +349,55 @@ def option_choice():
   if choice == "3":
     print("\nReturning To Game\n")
     option = "3"
+  if choice == "4":
+    print("\nSurrendering...\n")
+    option = "4"
   return option
   
-    
-
 def play_game(SampleGame):
-  Board = CreateBoard() #0th index not used
   StartSquare = 0 
   FinishSquare = 0
-  PlayAgain = "Y"
-  while PlayAgain == "Y":
-    WhoseTurn = "W"
-    GameOver = False
-    if ord(SampleGame) >= 97 and ord(SampleGame) <= 122:
-      SampleGame = chr(ord(SampleGame) - 32)
-    InitialiseBoard(Board, SampleGame)
-    while not(GameOver):
-      DisplayBoard(Board)
-      DisplayWhoseTurnItIs(WhoseTurn)
-      MoveIsLegal = False
-      skip = False
-      while not(MoveIsLegal):
-        StartSquare, FinishSquare, quitNow = GetMove(StartSquare, FinishSquare)
-        if quitNow:
-          return
-        confirmation = ConfirmMove(StartSquare, FinishSquare)
-        if confirmation == "y":
-          StartRank = StartSquare % 10
-          StartFile = StartSquare // 10
-          FinishRank = FinishSquare % 10
-          FinishFile = FinishSquare // 10
-          MoveIsLegal = CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
-        if confirmation == "n":
-          skip = True
-        if not(MoveIsLegal) and not skip:
-          print("That is not a legal move - please try again")
-      GameOver = CheckIfGameWillBeWon(Board, FinishRank, FinishFile)
-      MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
-      if GameOver:
-        DisplayWinner(WhoseTurn)
-      if WhoseTurn == "W":
-        WhoseTurn = "B"
-      else:
-        WhoseTurn = "W"
-    PlayAgain = input("Do you want to play again (enter Y for Yes)? ")
-    if ord(PlayAgain) >= 97 and ord(PlayAgain) <= 122:
-      PlayAgain = chr(ord(PlayAgain) - 32)
+  WhoseTurn = "W"
+  GameOver = False
+  if ord(SampleGame) >= 97 and ord(SampleGame) <= 122:
+    SampleGame = chr(ord(SampleGame) - 32)
+  InitialiseBoard(Board, SampleGame)
+  while not(GameOver):
+    DisplayBoard(Board)
+    DisplayWhoseTurnItIs(WhoseTurn)
+    MoveIsLegal = False
+    skip = False
+    while not(MoveIsLegal):
+      StartSquare, FinishSquare, quitNow = GetMove(StartSquare, FinishSquare, WhoseTurn)
+      if quitNow == True:
+        return
+      confirmation = ConfirmMove(StartSquare, FinishSquare)
+      if confirmation == "y":
+        StartRank = StartSquare % 10
+        StartFile = StartSquare // 10
+        FinishRank = FinishSquare % 10
+        FinishFile = FinishSquare // 10
+        MoveIsLegal = CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
+      if confirmation == "n":
+        skip = True
+      if not(MoveIsLegal) and not skip:
+        print("That is not a legal move - please try again")
+    GameOver = CheckIfGameWillBeWon(Board, FinishRank, FinishFile)
+    MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
+    if GameOver:
+      DisplayWinner(WhoseTurn)
+    if WhoseTurn == "W":
+      WhoseTurn = "B"
+    else:
+      WhoseTurn = "W"
+  PlayAgain = input("Do you want to play again (enter Y for Yes)? ")
+  if ord(PlayAgain) >= 97 and ord(PlayAgain) <= 122:
+    PlayAgain = chr(ord(PlayAgain) - 32)
 
 if __name__ == "__main__":
-  menu = True
-  while menu:
-    menu = False
+  Board = CreateBoard() #0th index not used
+  PlayAgain = "Y"
+  while PlayAgain == "Y":
     display_menu()
     menuChoice = get_menu_selection()
     make_selection(menuChoice)
