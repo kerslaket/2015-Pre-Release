@@ -82,12 +82,19 @@ def DisplayBoard(Board):
 
 def CheckRedumMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, ColourOfPiece):
   CheckRedumMoveIsLegal = False
+  Difference = FinishFile - StartFile
   if ColourOfPiece == "W":
-    if FinishRank == StartRank - 1:
+    if Difference == -2:
+      if StartRank == 7:
+        CheckRedumMoveIsLegal = True
+    elif FinishRank == StartRank - 1:
       if FinishFile == StartFile and Board[FinishRank][FinishFile] == "  ":
         CheckRedumMoveIsLegal = True
       elif abs(FinishFile - StartFile) == 1 and Board[FinishRank][FinishFile][0] == "B":
         CheckRedumMoveIsLegal = True
+  elif Difference == 2:
+    if StartRank == 2:
+      CheckRedumMoveIsLegal = True
   elif FinishRank == StartRank + 1:
     if FinishFile == StartFile and Board[FinishRank][FinishFile] == "  ":
       CheckRedumMoveIsLegal = True
@@ -133,9 +140,18 @@ def CheckNabuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
   CheckNabuMoveIsLegal = False
   if abs(FinishFile - StartFile) == abs(FinishRank - StartRank):
     CheckNabuMoveIsLegal = True
-  for count in range(0, abs(FinishFile - StartFile)):
-    if Board[abs(FinishRank - count)][abs(FinishFile - count)] != "  ":
-      CheckNabuMoveIsLegal = False
+  Difference = FinishRank - StartRank
+  if Difference >= 1:
+    CheckNabuMoveIsLegal = True
+    for Count in range(1, Difference):
+      if Board[StartRank + Count][StartFile + Count] != "  ":
+        CheckNabuMoveIsLegal = False
+  elif Difference <= -1:
+    CheckNabuMoveIsLegal = True
+    for Count in range(-1, Difference, -1):
+      if Board[StartRank + Count][StartFile + Count] != "  ":
+        CheckNabuMoveIsLegal = False
+  
   return CheckNabuMoveIsLegal
 
 def CheckMarzazPaniMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
