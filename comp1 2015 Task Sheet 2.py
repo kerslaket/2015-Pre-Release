@@ -143,15 +143,18 @@ def CheckNabuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
   Difference = FinishRank - StartRank
   if Difference >= 1:
     CheckNabuMoveIsLegal = True
-    for Count in range(1, Difference):
+    Count = 1
+    while Count != Difference:
       if Board[StartRank + Count][StartFile + Count] != "  ":
         CheckNabuMoveIsLegal = False
+      Count += 1
   elif Difference <= -1:
     CheckNabuMoveIsLegal = True
-    for Count in range(-1, Difference, -1):
+    Count = -1
+    while Count != Difference:
       if Board[StartRank + Count][StartFile + Count] != "  ":
         CheckNabuMoveIsLegal = False
-  
+      Count -= 1
   return CheckNabuMoveIsLegal
 
 def CheckMarzazPaniMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
@@ -323,7 +326,7 @@ def MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
     Board[StartRank][StartFile] = "  "
     
 def ConfirmMove(StartSquare, FinishSquare):
-  print("Move from Rank {0}, File {1} to Rank {2}, File {3}? ".format(str(StartSquare)[0],str(StartSquare)[1],str(FinishSquare)[0],str(FinishSquare)[1]))
+  print("Move from File {0}, Rank {1} to File {2}, Rank {3}? ".format(str(StartSquare)[0],str(StartSquare)[1],str(FinishSquare)[0],str(FinishSquare)[1]))
   confirmation = input("Confirm Move (Yes/No): ")
   return confirmation.lower()[0]
 
