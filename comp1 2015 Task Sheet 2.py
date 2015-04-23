@@ -82,17 +82,27 @@ def DisplayBoard(Board):
 
 def CheckRedumMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, ColourOfPiece):
   CheckRedumMoveIsLegal = False
-  Difference = FinishFile - StartFile
-  if ColourOfPiece == "W":
-    if Difference == -2:
-      if StartRank == 7:
-        CheckRedumMoveIsLegal = True
+  RankDifference = FinishRank - StartRank
+  FileDifference = FinishFile - StartFile
+  if FileDifference != 0:
+    checkRedumMoveIsLegal = False
+  elif ColourOfPiece == "W":
+    if RankDifference == -2:
+      CheckRedumMoveIsLegal = True
+      if StartRank != 7:
+        CheckRedumMoveIsLegal = False
+    elif StartRank == 7:
+      CheckRedumMoveIsLegal = True
     elif FinishRank == StartRank - 1:
       if FinishFile == StartFile and Board[FinishRank][FinishFile] == "  ":
         CheckRedumMoveIsLegal = True
       elif abs(FinishFile - StartFile) == 1 and Board[FinishRank][FinishFile][0] == "B":
         CheckRedumMoveIsLegal = True
-  elif Difference == 2:
+  elif ColourOfPiece == "B":
+    if RankDifference == 2:
+      CheckRedumMoveIsLegal = True
+      if StartRank != 2:
+        CheckRedumMoveIsLegal = False
     if StartRank == 2:
       CheckRedumMoveIsLegal = True
   elif FinishRank == StartRank + 1:
@@ -140,19 +150,34 @@ def CheckNabuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
   CheckNabuMoveIsLegal = False
   if abs(FinishFile - StartFile) == abs(FinishRank - StartRank):
     CheckNabuMoveIsLegal = True
-  Difference = FinishRank - StartRank
-  if Difference >= 1:
+  RankDifference = StartRank - FinishRank
+  FileDifference = StartFile - FinishFile
+  if RankDifference > 0 and FileDifference > 0:
     CheckNabuMoveIsLegal = True
     Count = 1
-    while Count != Difference:
-      if Board[StartRank + Count][StartFile + Count] != "  ":
+    while Count != RankDifference:
+      if Board[StartRank - Count][StartFile - Count] != "  ":
         CheckNabuMoveIsLegal = False
       Count += 1
-  elif Difference <= -1:
+  if RankDifference > 0 and FileDifference < 0:
+    CheckNabuMoveIsLegal = True
+    Count = 1
+    while Count != RankDifference:
+      if Board[StartRank - Count][StartFile + Count] != "  ":
+        CheckNabuMoveIsLegal = False
+      Count += 1
+  if RankDifference < 0 and FileDifference > 0:
     CheckNabuMoveIsLegal = True
     Count = -1
-    while Count != Difference:
-      if Board[StartRank + Count][StartFile + Count] != "  ":
+    while Count != RankDifference:
+      if Board[StartRank - Count][StartFile + Count] != "  ":
+        CheckNabuMoveIsLegal = False
+      Count -= 1
+  if RankDifference < 0 and FileDifference < 0:
+    CheckNabuMoveIsLegal = True
+    Count = -1
+    while Count != RankDifference:
+      if Board[StartRank - Count][StartFile-+ Count] != "  ":
         CheckNabuMoveIsLegal = False
       Count -= 1
   return CheckNabuMoveIsLegal
