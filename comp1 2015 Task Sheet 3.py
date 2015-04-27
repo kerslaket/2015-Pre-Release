@@ -32,10 +32,26 @@ def make_selection(menuChoice):
   if menuChoice == "4":
     print(" ")
   if menuChoice == "5":
-    print(" ")
+    choice = settingsMenu()
+    settingsChoice(choice)
   if menuChoice == "6":
     print("Goodbye")
 
+def settingsMenu():
+  print("\n1. Use Kashaptu Piece")
+  print("9. Return to Main Menu")
+  choice = input("\nPlease Select setting to change: ")
+  return choice
+
+def settingsChoice(Choice):
+  if Choice == "1":
+    global Kashshaptu
+    Kashshaptu = input("Do you wish to use the Kashaptu piece (Y/N)? ").lower()[0]
+    if Kashshaptu == "y":
+      print("Kashshaptu Activated!")
+    else:
+      print("Kashshaptu Deactivated!")
+  
 def CreateBoard():
   Board = []
   for Count in range(BOARDDIMENSION + 1):
@@ -194,6 +210,9 @@ def CheckEtluMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
     CheckEtluMoveIsLegal = True
   return CheckEtluMoveIsLegal
 
+def CheckKashshaptuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
+  CheckKashshaptuMoveIsLegal = False
+
 def CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
   MoveIsLegal = True
   if (FinishFile == StartFile) and (FinishRank == StartRank):
@@ -229,6 +248,8 @@ def CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseT
           MoveIsLegal = CheckNabuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile)
         elif PieceType == "E":
           MoveIsLegal = CheckEtluMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile)
+        elif PieceType == "K":
+          MoveIsLegal = CheckKashshaptuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile)
     except IndexError:
       MoveIsLegal = False
   return MoveIsLegal
@@ -337,14 +358,21 @@ def GetMove(StartSquare, FinishSquare, WhoseTurn):
   return StartSquare, FinishSquare, quitNow
 
 def MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
+  global Kashshaptu
+  if Kashshaptu == "y":
+    Initial = "K"
+    Name = "Kashaptu"
+  else:
+    Initial = "M"
+    Name = "Marzaz Pani"
   if WhoseTurn == "W" and FinishRank == 1 and Board[StartRank][StartFile][1] == "R":
-    Board[FinishRank][FinishFile] = "WM"
+    Board[FinishRank][FinishFile] = "W{0}".format(Initial)
     Board[StartRank][StartFile] = "  "
-    print("White Redum Promoted To Marzaz Pani")
+    print("White Redum Promoted To {0}".format(Name))
   elif WhoseTurn == "B" and FinishRank == 8 and Board[StartRank][StartFile][1] == "R":
-    Board[FinishRank][FinishFile] = "BM"
+    Board[FinishRank][FinishFile] = "B{0}".format(Initial)
     Board[StartRank][StartFile] = "  "
-    print("Black Redum Promoted To Marzaz Pani")
+    print("Black Redum Promoted To {0}".format(Name))
   else:
     try:
       colour1, piece1, = GetPieceName(Board,StartRank,StartFile)
@@ -448,6 +476,8 @@ def play_game(SampleGame):
 if __name__ == "__main__":
   Board = CreateBoard() #0th index not used
   PlayAgain = "Y"
+  global Kashashptu
+  Kashshaptu = "n"
   while PlayAgain == "Y":
     display_menu()
     menuChoice = get_menu_selection()
