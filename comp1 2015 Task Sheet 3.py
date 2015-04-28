@@ -17,33 +17,37 @@ def display_menu():
 
 def get_menu_selection():
   print(" ")
-  menuChoice = input("Please select an option: ")
+  menuChoice = 0
+  while 1 > menuChoice or menuChoice > 6:
+    menuChoice = int(input("Please select an option: "))
   return menuChoice
 
-def make_selection(menuChoice):
-  if menuChoice == "1":
+def make_selection(menuChoice,highScores):
+  if menuChoice == 1:
     SampleGame = "n"
     play_game(SampleGame)
-  if menuChoice == "2":
+  if menuChoice == 2:
     print(" ")
-  if menuChoice == "3":
+  if menuChoice == 3:
     SampleGame = "y"
     play_game(SampleGame)
-  if menuChoice == "4":
-    print(" ")
-  if menuChoice == "5":
-    choice = settingsMenu()
-    settingsChoice(choice)
-  if menuChoice == "6":
+  if menuChoice == 4:
+    display_high_scores()
+  if menuChoice == 5:
+    settingsMenu()
+    settingsChoice()
+  if menuChoice == 6:
     print("Goodbye")
+
+def display_high_scores():
+  
 
 def settingsMenu():
   print("\n1. Use Kashaptu Piece")
   print("9. Return to Main Menu")
-  choice = input("\nPlease Select setting to change: ")
-  return choice
 
-def settingsChoice(Choice):
+def settingsChoice():
+  Choice = input("\nPlease Select setting to change: ")
   if Choice == "1":
     global Kashshaptu
     Kashshaptu = input("Do you wish to use the Kashaptu piece (Y/N)? ").lower()[0]
@@ -210,8 +214,17 @@ def CheckEtluMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
     CheckEtluMoveIsLegal = True
   return CheckEtluMoveIsLegal
 
-def CheckKashshaptuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile):
-  CheckKashshaptuMoveIsLegal = False
+def CheckKashshaptuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, ColourOfPiece):
+  CheckKashaptuMoveIsLegal = CheckRedumMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, ColourOfPiece)
+  if CheckKashaptuMoveIsLegal == False:
+    CheckKashaptuMoveIsLegal = CheckGisgigirMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile)
+  if CheckKashaptuMoveIsLegal == False:
+    CheckKashaptuMoveIsLegal = CheckNabuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile)
+  if CheckKashaptuMoveIsLegal == False:
+    CheckKashaptuMoveIsLegal = CheckMarzazPaniMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile)
+  if CheckKashaptuMoveIsLegal == False:
+    CheckKashaptuMoveIsLegal = CheckEtluMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile)
+  return CheckKashshaptuMoveIsLegal
 
 def CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn):
   MoveIsLegal = True
@@ -249,7 +262,7 @@ def CheckMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseT
         elif PieceType == "E":
           MoveIsLegal = CheckEtluMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile)
         elif PieceType == "K":
-          MoveIsLegal = CheckKashshaptuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile)
+          MoveIsLegal = CheckKashshaptuMoveIsLegal(Board, StartRank, StartFile, FinishRank, FinishFile, PieceColour)
     except IndexError:
       MoveIsLegal = False
   return MoveIsLegal
@@ -408,6 +421,8 @@ def GetPieceName(Board, Rank, File):
     piece = "Nabu"
   elif PieceType == "E":
     piece = "Etlu"
+  elif PieceType == "K":
+    piece = "Kashshaptu"
   return colour, piece
 
 def option_menu():
@@ -478,10 +493,11 @@ if __name__ == "__main__":
   PlayAgain = "Y"
   global Kashashptu
   Kashshaptu = "n"
+  highScores = [None, "Name", "Colour", "Number of Moves", "Date"]
   while PlayAgain == "Y":
     display_menu()
     menuChoice = get_menu_selection()
-    make_selection(menuChoice)
+    make_selection(menuChoice,highScores)
   
 
 
