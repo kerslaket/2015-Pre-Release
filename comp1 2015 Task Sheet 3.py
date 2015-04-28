@@ -25,21 +25,32 @@ def get_menu_selection():
 def make_selection(menuChoice,highScores):
   if menuChoice == 1:
     SampleGame = "n"
-    play_game(SampleGame)
+    play_game(SampleGame,highScores)
   if menuChoice == 2:
     print(" ")
   if menuChoice == 3:
     SampleGame = "y"
-    play_game(SampleGame)
+    play_game(SampleGame,highScores)
   if menuChoice == 4:
-    display_high_scores()
+    display_high_scores(highScores)
   if menuChoice == 5:
     settingsMenu()
     settingsChoice()
   if menuChoice == 6:
     print("Goodbye")
 
-def display_high_scores():
+def display_high_scores(Scores):
+  print("\nHigh Scores\n")
+  if len(Scores) < 3:
+    print("There are no scores")
+  else:
+    for Score in Scores:
+      if Score != Scores[0]:
+        print("-" * 52)
+        print("| {0:<12} | {1:<7} | {2:<15} | {3:<5} |".format(Score[1],Score[2],Score[3],Score[4]))
+    print("-" * 52)
+  print(" ")
+          
   
 
 def settingsMenu():
@@ -74,11 +85,11 @@ def GetTypeOfGame():
   TypeOfGame = input("Do you want to play the sample game (enter Y for Yes)? ")
   return TypeOfGame.lower()[0]
 
-def DisplayWinner(WhoseTurn):
+def DisplayWinner(WhoseTurn, MovesMade):
   if WhoseTurn == "W":
-    print("Black's Sarrum has been captured.  White wins!")
+    print("Black's Sarrum has been captured in {0} moves.  White wins!".format(round(MovesMade / 2) + 1))
   else:
-    print("White's Sarrum has been captured.  Black wins!")
+    print("White's Sarrum has been captured in {0} moves.  Black wins!".format(round(MovesMade / 2)))
 
 def CheckIfGameWillBeWon(Board, FinishRank, FinishFile):
   if Board[FinishRank][FinishFile][1] == "S":
@@ -447,8 +458,15 @@ def option_choice():
     print("\nSurrendering...\n")
     option = "4"
   return option
+
+def AddHighScore(highScores,WhoseTurn, MovesMade):
+  name = input("Please enter your name for the high score table: ")
+  newScore = [None, name, WhoseTurn, MovesMade, "CurrentDate"]
+  highScores.append(newScore)
   
-def play_game(SampleGame):
+  
+def play_game(SampleGame, highScores):
+  MovesMade = 0
   StartSquare = 0 
   FinishSquare = 0
   WhoseTurn = "W"
@@ -479,11 +497,15 @@ def play_game(SampleGame):
     GameOver = CheckIfGameWillBeWon(Board, FinishRank, FinishFile)
     MakeMove(Board, StartRank, StartFile, FinishRank, FinishFile, WhoseTurn)
     if GameOver:
-      DisplayWinner(WhoseTurn)
+      DisplayWinner(WhoseTurn,MovesMade)
     if WhoseTurn == "W":
       WhoseTurn = "B"
     else:
       WhoseTurn = "W"
+    MovesMade += 1
+  AddName = input("Do you want to add your name to the highscore list? (Y/N): ").lower()[0]
+  if AddName == "y":
+    AddHighScore(highScores, WhoseTurn, MovesMade)
   PlayAgain = input("Do you want to play again (enter Y for Yes)? ")
   if ord(PlayAgain) >= 97 and ord(PlayAgain) <= 122:
     PlayAgain = chr(ord(PlayAgain) - 32)
@@ -493,7 +515,7 @@ if __name__ == "__main__":
   PlayAgain = "Y"
   global Kashashptu
   Kashshaptu = "n"
-  highScores = [None, "Name", "Colour", "Number of Moves", "Date"]
+  highScores = [[None],[None, "Name", "Colour", "Number of Moves", "Date"]]
   while PlayAgain == "Y":
     display_menu()
     menuChoice = get_menu_selection()
