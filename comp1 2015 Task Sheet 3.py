@@ -3,7 +3,16 @@
 # written by the AQA COMP1 Programmer Team
 # developed in the Python 3.4 programming environment
 
+from datetime import datetime
+
 BOARDDIMENSION = 8
+
+class HighScores:
+  def __init__(self):
+    self.Name = None
+    self.Colour = None
+    self.Moves = None
+    self.Date = None
 
 def display_menu():
   print("Main Menu")
@@ -41,18 +50,18 @@ def make_selection(menuChoice,highScores):
 
 def display_high_scores(Scores):
   print("\nHigh Scores\n")
-  if len(Scores) < 3:
+  if len(Scores) <= 1:
     print("There are no scores")
   else:
+    print(Scores)
+    print("| {0:<12} | {1:<7} | {2:<15} | {3:<5} |".format("Name","Colour","Moves","Date"))
     for Score in Scores:
-      if Score != Scores[0]:
+      if Score != None:
         print("-" * 52)
-        print("| {0:<12} | {1:<7} | {2:<15} | {3:<5} |".format(Score[1],Score[2],Score[3],Score[4]))
+        print("| {0:<12} | {1:<7} | {2:<15} | {3:<5} |".format(Score.Name,Score.Colour,Score.Moves,Score.Date))
     print("-" * 52)
   print(" ")
           
-  
-
 def settingsMenu():
   print("\n1. Use Kashaptu Piece")
   print("9. Return to Main Menu")
@@ -460,9 +469,12 @@ def option_choice():
   return option
 
 def AddHighScore(highScores,WhoseTurn, MovesMade):
-  name = input("Please enter your name for the high score table: ")
-  newScore = [None, name, WhoseTurn, MovesMade, "CurrentDate"]
-  highScores.append(newScore)
+  HighScores.Name = input("Please enter your name for the high score table: ")
+  HighScores.Colour = WhoseTurn
+  HighScores.Moves = MovesMade
+  HighScores.Date = (datetime.now().strftime("%d/%m/%y"))
+  newHighScore = HighScores()
+  highScores.append(newHighScore)
   
   
 def play_game(SampleGame, highScores):
@@ -515,7 +527,7 @@ if __name__ == "__main__":
   PlayAgain = "Y"
   global Kashashptu
   Kashshaptu = "n"
-  highScores = [[None],[None, "Name", "Colour", "Number of Moves", "Date"]]
+  highScores = [None]
   while PlayAgain == "Y":
     display_menu()
     menuChoice = get_menu_selection()
