@@ -32,6 +32,7 @@ def get_menu_selection():
   return menuChoice
 
 def make_selection(menuChoice,highScores):
+  playAgain = "Y"
   if menuChoice == 1:
     SampleGame = "n"
     play_game(SampleGame,highScores)
@@ -47,19 +48,21 @@ def make_selection(menuChoice,highScores):
     settingsChoice()
   if menuChoice == 6:
     print("Goodbye")
+    playAgain = "N"
+  return playAgain
 
 def display_high_scores(Scores):
   print("\nHigh Scores\n")
   if len(Scores) <= 1:
     print("There are no scores")
   else:
-    print(Scores)
-    print("| {0:<12} | {1:<7} | {2:<15} | {3:<5} |".format("Name","Colour","Moves","Date"))
+    print("-" * 55)
+    print("| {0:<12} | {1:<7} | {2:<15} | {3:<8} |".format("Name","Colour","Moves","Date"))
     for Score in Scores:
       if Score != None:
-        print("-" * 52)
-        print("| {0:<12} | {1:<7} | {2:<15} | {3:<5} |".format(Score.Name,Score.Colour,Score.Moves,Score.Date))
-    print("-" * 52)
+        print("-" * 55)
+        print("| {0:<12} | {1:<7} | {2:<15} | {3:<8} |".format(Score.Name[0:12],Score.Colour,Score.Moves,Score.Date))
+    print("-" * 55)
   print(" ")
           
 def settingsMenu():
@@ -468,14 +471,16 @@ def option_choice():
     option = "4"
   return option
 
-def AddHighScore(highScores,WhoseTurn, MovesMade):
-  HighScores.Name = input("Please enter your name for the high score table: ")
-  HighScores.Colour = WhoseTurn
-  HighScores.Moves = MovesMade
-  HighScores.Date = (datetime.now().strftime("%d/%m/%y"))
-  newHighScore = HighScores()
-  highScores.append(newHighScore)
-  
+def AddHighScore(highScores,WhoseTurn,MovesMade):
+  highScores.append(HighScores())
+  highScores[len(highScores) - 1].Name = input("Please enter your name for the high score table: ")
+  highScores[len(highScores) - 1].Colour = WhoseTurn
+  highScores[len(highScores) - 1].Moves = MovesMade
+  highScores[len(highScores) - 1].Date = datetime.now().strftime("%d/%m/%y")
+
+def save_high_scores(scores):
+  with open("HighScores.dat", mode = "wb") as HighScores_Files:
+    pickle.dump(scores,HighScores_Files)
   
 def play_game(SampleGame, highScores):
   MovesMade = 0
@@ -512,12 +517,14 @@ def play_game(SampleGame, highScores):
       DisplayWinner(WhoseTurn,MovesMade)
     if WhoseTurn == "W":
       WhoseTurn = "B"
+      LastTurn = "W"
     else:
       WhoseTurn = "W"
+      LastTurn = "B"
     MovesMade += 1
   AddName = input("Do you want to add your name to the highscore list? (Y/N): ").lower()[0]
   if AddName == "y":
-    AddHighScore(highScores, WhoseTurn, MovesMade)
+    AddHighScore(highScores, LastTurn, MovesMade)
   PlayAgain = input("Do you want to play again (enter Y for Yes)? ")
   if ord(PlayAgain) >= 97 and ord(PlayAgain) <= 122:
     PlayAgain = chr(ord(PlayAgain) - 32)
@@ -531,7 +538,7 @@ if __name__ == "__main__":
   while PlayAgain == "Y":
     display_menu()
     menuChoice = get_menu_selection()
-    make_selection(menuChoice,highScores)
+    PlayAgain = make_selection(menuChoice,highScores)
   
 
 
