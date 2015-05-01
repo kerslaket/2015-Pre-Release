@@ -4,7 +4,7 @@
 # developed in the Python 3.4 programming environment
 
 from datetime import datetime
-
+import pickle
 BOARDDIMENSION = 8
 
 class HighScores:
@@ -48,6 +48,7 @@ def make_selection(menuChoice,highScores):
     settingsChoice()
   if menuChoice == 6:
     print("Goodbye")
+    save_high_scores(highScores)
     playAgain = "N"
   return playAgain
 
@@ -481,6 +482,8 @@ def AddHighScore(highScores,WhoseTurn,MovesMade):
 def save_high_scores(scores):
   with open("HighScores.dat", mode = "wb") as HighScores_Files:
     pickle.dump(scores,HighScores_Files)
+
+def load_high_scores():
   
 def play_game(SampleGame, highScores):
   MovesMade = 0
